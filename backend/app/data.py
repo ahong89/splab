@@ -21,6 +21,11 @@ class SplabDB:
             session.commit()
             return new_tab.id
 
+    def get_tab(self, tab_id: int) -> Tab or None:
+        with Session(self.engine) as session:
+            stmt = select(Tab).where(Tab.id == tab_id)
+            return session.scalar(stmt)
+
     def get_tab_paid(self, tab_id: int) -> float:
         with Session(self.engine) as session:
             tab_total_stmt = select(Tab).where(Tab.id == tab_id)
@@ -34,7 +39,7 @@ class SplabDB:
                             ItemUser.item_id.in_(tab_item_ids),
                             ItemUser.paid == True
                         )
-                    ))
+                    ).scalar_subquery())
             paid = session.scalars(paid_stmt).one()
             return tab_total.total, paid or 0
 
@@ -44,6 +49,11 @@ class SplabDB:
             session.add(new_user)
             session.commit()
             return new_user.id
+
+    def get_user(self, user_id: int) -> User or None:
+        with Session(self.engine) as session:
+            stmt = select(User).where(User.id == user_id)
+            return session.scalar(stmt)
 
     def create_item_add_to_tab(self, tab_id: int, total: float) -> int:
         new_item = Item(tab_id=tab_id, total=total)
@@ -64,9 +74,8 @@ class SplabDB:
 
     def user_pay(self, user_id: int) -> None:
         with Session(self.engine) as session:
-            stmt = (session
-                    .query(ItemUser)
-                    .filter(ItemUser.user_id == user_id)
-                    .update({ItemUser.paid: True}))
+            stmt = session.query(ItemUser) \
+                    .filter(ItemUser.user_id == user_id) \
+                    .update({ItemUser.paid: True})
             session.commit()
 

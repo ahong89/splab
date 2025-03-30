@@ -1,6 +1,19 @@
 # Backend
 Database flavor is sqlite.
 
+## FastAPI
+FastAPI was selected because it
+* Is fast
+* Enforces OpenAPI standard
+* Generates docs for frontend team
+* Uses Pydantic models
+
+[FastAPI
+Testing](https://fastapi.tiangolo.com/tutorial/testing/#using-testclient)
+* Testing is used for integration testing as well as unit testing
+* Tests are written in order and use a real SQLite3 database to test
+  integration.
+
 ## DBML
 [DBML](https://dbml.dbdiagram.io/home/) is "Database Markup Language" used to
 create database schema diagram.
