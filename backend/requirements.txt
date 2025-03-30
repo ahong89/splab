@@ -1,2 +1,4 @@
-flask
 alembic
+fastapi[standard]
+pytest
+

@@ -40,9 +40,11 @@ def upgrade() -> None:
     )
     op.create_table(
         "item_users",
+        sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("item_id", sa.Integer, sa.ForeignKey("items.id")),
         sa.Column("user_id", sa.Integer, sa.ForeignKey("users.id")),
-        sa.Column("portion", sa.Float, default=0, nullable=False)
+        sa.Column("portion", sa.Float, nullable=False),
+        sa.Column("paid", sa.Boolean, default=False)
     )
 
 
